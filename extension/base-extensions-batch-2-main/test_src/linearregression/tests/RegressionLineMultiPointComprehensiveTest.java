@@ -1,0 +1,88 @@
+package linearregression.tests;
+
+import static org.junit.Assert.assertEquals;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import linearregression.RegressionLine;
+import linearregression.XY;
+import test.cse131.UnitTestUtils;
+
+/**
+ * @author Dennis Cosgrove (http://www.cse.wustl.edu/~cosgroved/)
+ */
+@RunWith(Parameterized.class)
+public class RegressionLineMultiPointComprehensiveTest {
+	private final List<XY> xys;
+	private final double expectedSlope;
+	private final double expectedIntercept;
+
+	public RegressionLineMultiPointComprehensiveTest(List<XY> xys, double expectedSlope, double expectedIntercept) {
+		super();
+		this.xys = xys;
+		this.expectedSlope = expectedSlope;
+		this.expectedIntercept = expectedIntercept;
+	}
+
+	@Test
+	public void test() {
+		RegressionLine regressionLine = new RegressionLine();
+		for (XY xy : xys) {
+			regressionLine.accept(xy);
+		}
+		assertEquals(expectedSlope, regressionLine.getSlope(), UnitTestUtils.reasonableDelta());
+		assertEquals(expectedIntercept, regressionLine.getIntercept(), UnitTestUtils.reasonableDelta());
+	}
+
+	@Parameterized.Parameters(name = "{0}")
+	public static Collection<Object[]> getConstructorArguments() {
+		Collection<Object[]> args = new LinkedList<>();
+		
+		// specific point on y axis cases
+		args.add(new Object[] {Arrays.asList(new XY(0.0, 0.0), new XY(1.0, 0.0), new XY(2.0, 0.0)), 0.0, 0.0});
+		args.add(new Object[] {Arrays.asList(new XY(0.0, 0.0), new XY(1.0, 1.0), new XY(2.0, 2.0)), 1.0, 0.0});
+		args.add(new Object[] {Arrays.asList(new XY(0.0, 0.0), new XY(1.0, 2.0), new XY(2.0, 4.0)), 2.0, 0.0});
+		args.add(new Object[] {Arrays.asList(new XY(0.0, 0.0), new XY(2.0, 1.0), new XY(4.0, 2.0)), 0.5, 0.0});
+		args.add(new Object[] {Arrays.asList(new XY(0.0, 1.0), new XY(1.0, 1.0), new XY(2.0, 1.0)), 0.0, 1.0});
+		args.add(new Object[] {Arrays.asList(new XY(0.0, 1.0), new XY(2.0, 1.0), new XY(4.0, 1.0)), 0.0, 1.0});
+		args.add(new Object[] {Arrays.asList(new XY(0.0, 1.0), new XY(2.0, -1.0), new XY(4.0, -3.0)), -1.0, 1.0});
+		args.add(new Object[] {Arrays.asList(new XY(0.0, 0.0), new XY(1.0, 0.0), new XY(2.0, 0.0), new XY(10.0, 10.0)), 1.0756972111553784, -0.9960159362549801});
+		args.add(new Object[] {Arrays.asList(new XY(0.0, 0.0), new XY(1.0, 1.0), new XY(2.0, 2.0), new XY(10.0, 10.0)), 1.0, 0.0});
+		args.add(new Object[] {Arrays.asList(new XY(0.0, 0.0), new XY(1.0, 2.0), new XY(2.0, 4.0), new XY(10.0, 10.0)), 0.9243027888446215, 0.9960159362549801});
+		args.add(new Object[] {Arrays.asList(new XY(0.0, 0.0), new XY(2.0, 1.0), new XY(4.0, 2.0), new XY(10.0, 10.0)), 1.0357142857142858, -0.8928571428571432});
+		args.add(new Object[] {Arrays.asList(new XY(0.0, 1.0), new XY(1.0, 1.0), new XY(2.0, 1.0), new XY(10.0, 10.0)), 0.9681274900398407, 0.10358565737051784});
+		args.add(new Object[] {Arrays.asList(new XY(0.0, 1.0), new XY(2.0, 1.0), new XY(4.0, 1.0), new XY(10.0, 10.0)), 0.9642857142857143, -0.6071428571428572});
+		args.add(new Object[] {Arrays.asList(new XY(0.0, 1.0), new XY(2.0, -1.0), new XY(4.0, -3.0), new XY(10.0, 10.0)), 1.0357142857142858, -2.3928571428571432});
+
+		// random cases
+		args.add(new Object[] {Arrays.asList(new XY(-1.3009393443066486, -6.08040602225711), new XY(4.229159752072377, -1.4007751484484903), new XY(-6.382187760074773, -5.856563226252948)), 0.42616911142986297, -3.955256733172416});
+		args.add(new Object[] {Arrays.asList(new XY(-0.6391075758580573, -0.15136302052310313), new XY(-2.2684509275310605, 8.007373177986935), new XY(2.276472075233496, -2.9565683814033488)), -2.241391558562627, 1.161643327756344});
+		args.add(new Object[] {Arrays.asList(new XY(-4.631215257299768, 4.935043955657788), new XY(1.9588265584979325, 9.381961678048032), new XY(0.09781029662525498, 7.065468986148318)), 0.6308683478443843, 7.6688982142770366});
+		args.add(new Object[] {Arrays.asList(new XY(8.522618448060761, -9.779454012474233), new XY(-4.507023573731419, 0.15273512536219158), new XY(-0.362455851309452, -6.082271769328374)), -0.7074410434655394, -4.3748700580235145});
+		args.add(new Object[] {Arrays.asList(new XY(-6.171675564099786, 0.8306833270638059), new XY(-0.3392262988217283, -7.461296369297883), new XY(-7.8696874091201945, 5.890164698605179), new XY(2.2872518026353745, 7.647582783818969)), -0.1536912186374929, 1.2621236667806393});
+		args.add(new Object[] {Arrays.asList(new XY(-2.6934278673323213, 9.157872762671463), new XY(-8.625780632462474, -3.5809463704510636), new XY(-7.5222407252003265, 4.63212900199286), new XY(-3.4310004076558513, 8.429919184025646)), 1.778500249315967, 14.562632950696496});
+		args.add(new Object[] {Arrays.asList(new XY(5.174736478406603, 0.7224363788778803), new XY(0.4667207319451254, 9.744890109220904), new XY(-5.276527653397487, 9.756005610938875), new XY(-7.752676339869606, -5.7100852663962565)), 0.2752528106488769, 4.136686224750264});
+		args.add(new Object[] {Arrays.asList(new XY(0.9252011312801116, 9.355860855127425), new XY(-0.9111526113619117, 9.010246102534229), new XY(9.049545908767385, -2.1384393986180106), new XY(1.1266507240600614, 8.939337872913796)), -1.2387349711680562, 9.44750461685981});
+		args.add(new Object[] {Arrays.asList(new XY(7.1934595145122735, 4.654944644473218), new XY(8.325869935602839, -8.941423940070123), new XY(1.2189925108889774, 8.069750448698997), new XY(8.357090890108413, -8.293239796311626), new XY(9.768068227172808, -1.4946663027319431)), -1.6361609370092918, 10.207526184502306});
+		args.add(new Object[] {Arrays.asList(new XY(3.4128485215159863, -8.697852165691096), new XY(7.262574632298048, 2.431140911394607), new XY(0.8752348221773474, -7.731210154802721), new XY(-3.6667328553503094, -5.840016347270758), new XY(7.842549897316399, 1.3127790511762747)), 0.7852824100262072, -6.174976581702456});
+		args.add(new Object[] {Arrays.asList(new XY(-7.218884388934432, 6.584573358282714), new XY(2.745588979003422, -4.4270401211492665), new XY(-4.040113623590347, 9.513181974576877), new XY(-1.3681932488642445, 3.6745296032238386), new XY(-4.621084411338532, -5.193302550526441)), -0.869976812837078, -0.4930117765946198});
+		args.add(new Object[] {Arrays.asList(new XY(-7.831729517459607, 7.342887829949298), new XY(-9.639825967779323, -8.789248935524396), new XY(-9.988047746693201, 6.988985924846894), new XY(-6.256107548396528, 8.593000182846403), new XY(-0.08141465693149108, -4.443661994974155)), -0.4708282259217017, -1.2441355207468747});
+		args.add(new Object[] {Arrays.asList(new XY(-7.077839058877062, 1.2370570377942691), new XY(7.8089494016293095, 8.923758769503), new XY(-8.109920253133748, 2.910953047542881), new XY(-6.015882284909477, 8.286807848894867), new XY(-3.460805066782198, 2.619451006866381), new XY(-8.221153843537913, 0.1948142011649896)), 0.41444818454246934, 5.7609690728153025});
+		args.add(new Object[] {Arrays.asList(new XY(-7.921898596625205, -0.7340985152923025), new XY(0.16495286618532745, -6.70073328741271), new XY(-3.74973634021803, -4.1092331887922455), new XY(8.16417372064679, 7.373272784810329), new XY(-5.07075087312394, 9.720327486720215), new XY(-6.597339212178874, 9.790668047274455)), 0.027464286990030434, 2.6254097851045506});
+		args.add(new Object[] {Arrays.asList(new XY(-2.293266057583647, 2.950500698769712), new XY(-0.26307940704037236, -2.592704355882544), new XY(-9.751208311755555, 1.007102829621111), new XY(-0.39633433650352856, 7.665861478208559), new XY(7.481134226329051, -0.034703847373844354), new XY(5.593701091201261, -8.250320890722167)), -0.3482247272188742, 0.14581815029528414});
+		args.add(new Object[] {Arrays.asList(new XY(7.074132882806779, -7.122636379034077), new XY(-7.277379476381151, -5.260466924647906), new XY(6.233598144683981, 5.949363986532889), new XY(7.968748738446763, 2.981791673267093), new XY(-3.5365468078047986, 9.823627085076815), new XY(-3.128577415709632, -2.745204940682724)), 0.08302578969325984, 0.5029275576729152});
+		args.add(new Object[] {Arrays.asList(new XY(-9.248395141177166, -1.3345475899043926), new XY(8.33035484769368, -8.175525169527567), new XY(5.540449989162719, -9.68122037120332), new XY(8.219485172143177, 4.109046255742143), new XY(-4.121367755858991, -5.512991637144211), new XY(0.026379867209453067, 7.42652616782361), new XY(6.310809975765309, 2.7115566626819625)), -0.04720056268966352, -1.3923461383481437});
+		args.add(new Object[] {Arrays.asList(new XY(-3.5491064632445113, -9.822257730893831), new XY(-7.652649013167059, -6.137864867723795), new XY(9.74446393129233, -1.1785995615721827), new XY(7.7660339107517515, 1.919144859866151), new XY(-9.455926583198915, -0.8733183610607078), new XY(1.5329850490190395, -0.98000991186737), new XY(5.052555387061872, -9.557252565109353)), 0.16606249718723895, -3.885877165460983});
+		args.add(new Object[] {Arrays.asList(new XY(4.790238822903156, 6.057524198286469), new XY(-1.3604088321986971, -8.896552603537986), new XY(-6.857534773634821, -4.43976693827689), new XY(-9.714608658414534, -0.41058967761719956), new XY(2.3855656637788503, -2.8498164022505375), new XY(-3.238283149170238, 5.698624738736839), new XY(-3.145005449815626, -5.433839589283691)), 0.28100554120877735, -0.779710153658842});
+		args.add(new Object[] {Arrays.asList(new XY(-1.9574520431243734, -1.269485277471059), new XY(-1.26818612867973, -4.944173843576365), new XY(6.159368941027246, -4.432584686106038), new XY(3.9296589636541324, -3.1178568043343136), new XY(8.563687235495511, -9.458728834902976), new XY(-4.4040699472885265, -1.2443008606607293), new XY(4.032070714172482, -8.897720287640823)), -0.5201045046667876, -3.647805263782374});
+
+		return args;
+	}
+}
